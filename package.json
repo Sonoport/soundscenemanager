@@ -1,0 +1,22 @@
+{
+  "name": "sound-scene-manager",
+  "version": "1.0.0",
+  "description": "A framework for managing multiple sounds that need to change based on the 'scene' on an application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:sonoport/sound-scene-manager.git"
+  },
+  "keywords": [
+    "sound",
+    "audio",
+    "fade",
+    "scene",
+    "manager"
+  ],
+  "author": "Sonoport Asia Pte. Ltd.",
+  "license": "Apache-2.0"
+}
