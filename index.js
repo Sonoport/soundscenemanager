@@ -1,17 +1,4 @@
-// scene = {
-// 	name: "sceneName",
-// 	sounds: [
-// 		{
-// 			name: "light",
-// 			model: "BaseSound",
-// 		},
-// 		{
-
-// 		}
-// 	],
-// 	fadeInTime: 5,
-// 	fadeOutTime: 5
-// }
+var Fader = require('soundmodels/effects/Fader');
 
 function SoundSceneManager(options){
 
@@ -22,50 +9,65 @@ function SoundSceneManager(options){
 		this.context = new AudioContext();
 	}
 
-	this.scenes = [options.scenes];
+	this.scenes = options.scenes;
 	this.sceneFaders = [];
 	this.sounds = [];
 	this.fadeDuration = options.fadeDuration || 2.0;
 
 	this.currentScene;
 
-	this.scenes.forEach(function(thisScene){
-		var newFader = Fader(this.context);
-		this.sounds.forEach(function(thisSound){
+	this.scenes.forEach(function(thisScene, sceneIndex){
+		var newFader = new Fader(this.context);
+		if (sceneIndex !== 0){
+			newFader.volume.value = 0;
+		}else{
+			this.currentScene = thisScene;
+		}
+		thisScene.sounds.forEach(function(thisSound){
 			this.sounds.push(thisSound);
-			thisSound.setOutputEffect(fader);
+			thisSound.model.setOutputEffect(newFader);
+			newFader.disconnect();
 			this.sceneFaders.push(newFader);
-		});
-		this.scene.fader = newFader;
-	});
+		}.bind(this));
+		thisScene.fader = newFader;
+		newFader.connect(this.context.destination);
+	}.bind(this));
 }
 
 SoundSceneManager.prototype.transitionToScene = function(sceneName, startTime, duration){
-	if (!startTime !! typeof startTime !== 'Number'){
+	if (!startTime || typeof startTime !== 'number'){
+		console.log('no start time!!');
 		startTime = this.context.currentTime;
 	}
-	if (!duration !! typeof duration !== 'Number'){
+	if (!duration || typeof duration !== 'number'){
 		duration = this.fadeDuration;
 	}
 
-	this.scenes.forEach(function (theScene){
+	this.scenes.forEach(function (thisScene){
 		if (thisScene.name === sceneName){
 			nextScene = thisScene;
 		}
 	});
 
+	if (!nextScene){
+		console.warn("No next scene", sceneName, "to transitions to");
+	}
+
 	var fadeStartTime = Math.max(startTime - duration/2, this.context.currentTime);
 	var fadeEndTime = fadeStartTime + duration;
 
-	this.currentScene.fader.volume.setValueAtTime(1,fadeStartTime);
+	console.log(this.context.currentTime, "Starting fade out at ", fadeStartTime, fadeEndTime);
+	this.currentScene.fader.volume.setValueAtTime(100,fadeStartTime);
 	this.currentScene.fader.volume.linearRampToValueAtTime(0,fadeEndTime);
 	nextScene.fader.volume.setValueAtTime(0,fadeStartTime);
-	nextScene.fader.volume.linearRampToValueAtTime(1,fadeEndTime);
+	nextScene.fader.volume.linearRampToValueAtTime(100,fadeEndTime);
+
+	this.currentScene = nextScene;
 }
 
 SoundSceneManager.prototype.endTransition = function(endTime){
 
-	if (!endTime !! typeof endTime !== 'Number'){
+	if (!endTime || typeof endTime !== 'number'){
 		endTime = this.context.currentTime;
 	}
 
