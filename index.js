@@ -29,8 +29,8 @@ function SoundSceneManager(options){
 		}
 		thisScene.sounds.forEach(function(thisSound){
 			this.sounds.push(thisSound);
-			thisSound.model.setOutputEffect(newFader);
-			newFader.disconnect();
+			thisSound.model.disconnect();
+			thisSound.model.connect(fader);
 			this.sceneFaders.push(newFader);
 		}.bind(this));
 		thisScene.fader = newFader;
