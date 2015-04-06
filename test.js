@@ -56,7 +56,7 @@ var options ={
 			model: clubSound,
 		}]
 	}],
-	fadeDuration: 2,
+	fadeDuration: 1,
 	startingScene: "ocean",
 	context: context
 }

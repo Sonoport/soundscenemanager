@@ -17,6 +17,8 @@ function SoundSceneManager(options){
 
 	this.currentScene;
 	this.preMuteScene;
+	this.previousFadeStart;
+	this.previousFadeEnd;
 
 	this.scenes.forEach(function(thisScene, sceneIndex){
 		var newFader = new Fader(this.context);
@@ -59,18 +61,30 @@ SoundSceneManager.prototype.transitionToScene = function(sceneName, startTime, d
 	var fadeEndTime = fadeStartTime + duration;
 
 	if (this.currentScene){
-		console.log(""+this.context.currentTime, ": fading out", this.currentScene.name, ":", fadeStartTime, "-",fadeEndTime)
+		console.log(""+this.context.currentTime, ": fading out", this.currentScene.name, ":", fadeStartTime, "-",fadeEndTime);
+
+
+		var currentValue = 100;
+		var remainingTime = (this.previousFadeEnd-this.context.currentTime);
+		if (nextScene && remainingTime >0){
+			currentValue = (1-(remainingTime/(this.previousFadeEnd-this.previousFadeStart)))*100;
+			// console.log(currentValue);
+		}
+
 		this.currentScene.fader.volume.cancelScheduledValues(this.context.currentTime);
-		this.currentScene.fader.volume.setValueAtTime(100,fadeStartTime);
+		this.currentScene.fader.volume.setValueAtTime(currentValue,fadeStartTime);
 		this.currentScene.fader.volume.linearRampToValueAtTime(0.00001,fadeEndTime);
 	}
 
 	if (nextScene){
 		console.log(""+this.context.currentTime, ": fading in", nextScene.name, ":", fadeStartTime, "-",fadeEndTime)
+		nextScene.fader.volume.cancelScheduledValues(this.context.currentTime);
 		nextScene.fader.volume.setValueAtTime(0,fadeStartTime);
 		nextScene.fader.volume.linearRampToValueAtTime(100,fadeEndTime);
 	}
 
+	this.previousFadeStart = fadeStartTime;
+	this.previousFadeEnd = fadeEndTime;
 	this.currentScene = nextScene;
 }
 
