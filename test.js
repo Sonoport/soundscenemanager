@@ -1,5 +1,5 @@
 var SoundSceneManager  = require('./index.js');
-var Looper = require('soundmodels/models/Looper');
+var Looper = require('soundnodes/nodes/Looper');
 
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -41,19 +41,19 @@ var options ={
 		name:"ocean",
 		sounds:[{
 			name:"background",
-			model: oceanBgSound,
+			node: oceanBgSound,
 		},{
 			name:"diver",
-			model: diverSound,
+			node: diverSound,
 		}]
 	},{
 		name:"city",
 		sounds:[{
 			name:"kitchen",
-			model: kitchenSound,
+			node: kitchenSound,
 		},{
 			name:"club",
-			model: clubSound,
+			node: clubSound,
 		}]
 	}],
 	fadeDuration: 1,
