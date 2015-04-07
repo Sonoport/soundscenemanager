@@ -99,7 +99,8 @@ var s = soundscenemanager(options);
 	```
 	s.transitionToScene('nextSceneName', context.currentTime+10, 2);
 	```
-	- arguments :
+
+	arguments :
 		- `nextSceneName` : __String__ - The `name` of the scene to transition to. If `null`, the current scene will fade out.
 		- `startTime` : __Number__ - Start time for the transtion in the same time coordinate system as the AudioContext _currentTime_ attribute.
 		- `fadeDuration` : __Number__ - Duration in seconds of the transtion.
@@ -112,7 +113,7 @@ var s = soundscenemanager(options);
 	s.transitionToNextScene(context.currentTime+10, 2);
 	```
 
-	- arguments :
+	arguments :
 		- `startTime` : __Number__ - Start time for the transtion in the same time coordinate system as the AudioContext _currentTime_ attribute.
 		- `fadeDuration` : __Number__ - Duration in seconds of the transtion.
 
@@ -124,7 +125,7 @@ var s = soundscenemanager(options);
 	s.transitionToPrevScene(context.currentTime+10, 2);
 	```
 
-	- arguments :
+	arguments :
 		- `startTime` : __Number__ - Start time for the transtion in the same time coordinate system as the AudioContext _currentTime_ attribute.
 		- `fadeDuration` : __Number__ - Duration in seconds of the transtion.
 
@@ -136,7 +137,7 @@ var s = soundscenemanager(options);
 	s.endTransition(context.currentTime+10);
 	```
 
-	- arguments :
+	arguments :
 		- `startTime` : __Number__ - Start time for the ending of transitions in the same time coordinate system as the AudioContext _currentTime_ attribute.
 
 - `mute` : Fades out all audio from the SoundSceneManager.
@@ -147,7 +148,7 @@ var s = soundscenemanager(options);
 	s.mute(context.currentTime+10, 2);
 	```
 
-	- arguments :
+	arguments :
 		- `startTime` : __Number__ - Start time for begining of the fadeout in the same time coordinate system as the AudioContext _currentTime_ attribute.
 		- `fadeDuration` : __Number__ - Duration in seconds taken for the fadeout.
 
@@ -159,7 +160,7 @@ var s = soundscenemanager(options);
 	s.unMute(context.currentTime+10, 2);
 	```
 
-	- arguments :
+	arguments :
 		- `startTime` : __Number__ - Start time for begining of the fadein in the same time coordinate system as the AudioContext _currentTime_ attribute.
 		- `fadeDuration` : __Number__ - Duration in seconds taken for the fadein.
 
@@ -171,7 +172,7 @@ var s = soundscenemanager(options);
 	s.toggle(context.currentTime+10, 2);
 	```
 
-	- arguments :
+	arguments :
 		- `startTime` : __Number__ - Start time for begining of the fadein/fadeout in the same time coordinate system as the AudioContext _currentTime_ attribute.
 		- `fadeDuration` : __Number__ - Duration in seconds taken for the fadein/fadeout.
 
@@ -193,7 +194,7 @@ var s = soundscenemanager(options);
 	s.addScene(newScene);
 	```
 
-	- arguments :
+	arguments :
 		- `newScene` : __Object__ - A new scene object that should have the following properties :
 			- `name` : __String__ - The name of the scene.
 			- sounds : __Array__ - Array of sound objects which are a part of this specific scene. Each sound object should have the following properties:
@@ -214,7 +215,7 @@ var s = soundscenemanager(options);
 	s.addSoundToScene(newSound,sceneName);
 	```
 
-	- arguments :
+	arguments :
 		- `newSound` : __Object__ - A new sound object that should have the following properties :
 			- `name` : __String__ - A name for identifying the sound object.
 			- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager.
