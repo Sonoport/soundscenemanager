@@ -1,5 +1,5 @@
 var SoundSceneManager  = require('./index.js');
-var Looper = require('soundnodes/nodes/Looper');
+var Looper = require('soundmodels/models/Looper');
 
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
