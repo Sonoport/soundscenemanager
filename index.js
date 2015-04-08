@@ -36,16 +36,15 @@ SoundSceneManager.prototype.addSoundToScene = function(thisSound, thisSceneName)
 		if (thisScene.name === thisSceneName){
 			selectedScene = thisScene;
 		}
-	});
-
-	if(selectedScene){
+	}.bind(this));
+	if(!selectedScene){
 		console.warn("Scene", thisSceneName, " not found.");
 		return
 	}
 
 	thisSound.node.disconnect();
 	thisSound.node.connect(selectedScene.fader);
-	thisScene.sounds.push(thisSound);
+	selectedScene.sounds.push(thisSound);
 }
 
 SoundSceneManager.prototype.addScene = function(thisScene){
