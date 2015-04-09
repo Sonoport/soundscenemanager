@@ -77,6 +77,7 @@ var options ={
 	fadeDuration: 1,
 	startingScene: "ocean",
 	fadeInAtStart: true,
+	fadeInAtStartDuration : 5,
 	context: context
 }
 var s = soundscenemanager(options);
