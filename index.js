@@ -11,21 +11,25 @@ function SoundSceneManager(options){
 
 	this._scenes = [];
 	this._sceneFaders = [];
-	this._preMuteScene;
-	this._previousFadeStart;
-	this._previousFadeEnd;
+	this._preMuteScene = null;
+	this._previousFadeStart = null;
+	this._previousFadeEnd = null;
 
 	// Properties
 	this.fadeDuration = options.fadeDuration || 2.0;
-	this.currentScene;
+	this.currentScene = null;
 	this.isMuted = false;
 
 	options.scenes.forEach(function(thisScene){
 		this.addScene(thisScene);
+		thisScene.fader.volume.value = 0;
 		if(thisScene.name === options.startingScene){
 			this.currentScene = thisScene;
-		}else{
-			thisScene.fader.volume.value = 0;
+			if (options.fadeInAtStart){
+				this.unMute(this._context.currentScene, options.fadeInAtStartDuration || this.fadeDuration);
+			}else{
+				thisScene.fader.volume.value = 100;
+			}
 		}
 	}.bind(this));
 }
@@ -41,13 +45,13 @@ SoundSceneManager.prototype.addSoundToScene = function(thisSound, thisSceneName)
 
 	if(!selectedScene){
 		console.warn("Scene", thisSceneName, " not found.");
-		return
+		return;
 	}
 
 	thisSound.node.disconnect();
 	thisSound.node.connect(selectedScene.fader);
 	selectedScene.sounds.push(thisSound);
-}
+};
 
 SoundSceneManager.prototype.addScene = function(thisScene){
 	if (!thisScene.maxVolume || typeof thisScene.maxVolume !== 'number'){
@@ -61,7 +65,7 @@ SoundSceneManager.prototype.addScene = function(thisScene){
 		this.addSoundToScene(thisSound, thisScene.name);
 	}.bind(this));
 	newFader.connect(this._context.destination);
-}
+};
 
 SoundSceneManager.prototype.transitionToScene = function(sceneName, startTime, duration){
 
@@ -80,12 +84,12 @@ SoundSceneManager.prototype.transitionToScene = function(sceneName, startTime, d
 	});
 
 	if (!nextScene){
-		console.warn("Unknown next scene.")
+		console.warn("Unknown next scene.");
 		return;
 	}
 
 	if (nextScene === this.currentScene){
-		console.warn("Current scene and next scene are the same. No transition done.")
+		console.warn("Current scene and next scene are the same. No transition done.");
 		return;
 	}
 
@@ -110,7 +114,7 @@ SoundSceneManager.prototype.transitionToScene = function(sceneName, startTime, d
 		}
 
 		if (nextScene){
-			console.log(""+this._context.currentTime, ": fading in", nextScene.name, ":", fadeStartTime, "-",fadeEndTime)
+			console.log(""+this._context.currentTime, ": fading in", nextScene.name, ":", fadeStartTime, "-",fadeEndTime);
 			nextScene.fader.volume.cancelScheduledValues(this._context.currentTime);
 			nextScene.fader.volume.setValueAtTime(0,fadeStartTime);
 			nextScene.fader.volume.linearRampToValueAtTime(nextScene.maxVolume,fadeEndTime);
@@ -122,7 +126,7 @@ SoundSceneManager.prototype.transitionToScene = function(sceneName, startTime, d
 
 	this.currentScene = nextScene;
 
-}
+};
 
 SoundSceneManager.prototype.transitionToNextScene = function(startTime, duration){
 	var currentIndex = this._scenes.indexOf(this.currentScene);
@@ -132,7 +136,7 @@ SoundSceneManager.prototype.transitionToNextScene = function(startTime, duration
 	}
 	var nextIndex = (currentIndex+1)%this._scenes.length;
 	this.transitionToScene(this._scenes[nextIndex].name, startTime, duration);
-}
+};
 
 SoundSceneManager.prototype.transitionToPrevScene = function(startTime, duration){
 	var currentIndex = this._scenes.indexOf(this.currentScene);
@@ -143,7 +147,7 @@ SoundSceneManager.prototype.transitionToPrevScene = function(startTime, duration
 	var len = this._scenes.length;
 	var nextIndex = ((currentIndex-1)%len + len)%len;
 	this.transitionToScene(this._scenes[nextIndex].name, startTime, duration);
-}
+};
 
 SoundSceneManager.prototype.endTransition = function(endTime){
 
@@ -165,7 +169,7 @@ SoundSceneManager.prototype.endTransition = function(endTime){
 		nextScene.fader.volume.cancelScheduledValues(this._context.currentTime);
 		nextScene.fader.volume.setValueAtTime(nextScene.maxVolume,endTime);
 	}
-}
+};
 
 SoundSceneManager.prototype.mute = function(startTime, duration){
 	if (!startTime || typeof startTime !== 'number'){
@@ -193,7 +197,7 @@ SoundSceneManager.prototype.mute = function(startTime, duration){
 		this._previousFadeEnd = startTime+duration;
 	}
 	this.isMuted = true;
-}
+};
 
 SoundSceneManager.prototype.unMute = function(startTime, duration){
 	if (this.currentScene){
@@ -204,7 +208,7 @@ SoundSceneManager.prototype.unMute = function(startTime, duration){
 			duration = this.fadeDuration;
 		}
 
-		console.log(""+this._context.currentTime, ": unmuting", this.currentScene.name, ":", startTime, "-",startTime+duration)
+		console.log(""+this._context.currentTime, ": unmuting", this.currentScene.name, ":", startTime, "-",startTime+duration);
 
 		this.currentScene.fader.volume.cancelScheduledValues(this._context.currentTime);
 		this.currentScene.fader.volume.setValueAtTime(0,startTime);
@@ -214,7 +218,7 @@ SoundSceneManager.prototype.unMute = function(startTime, duration){
 		this._previousFadeEnd = startTime+duration;
 	}
 	this.isMuted = false;
-}
+};
 
 SoundSceneManager.prototype.toggleMute = function(startTime, duration){
 	if (this.isMuted === false){
@@ -222,7 +226,7 @@ SoundSceneManager.prototype.toggleMute = function(startTime, duration){
 	}else{
 		this.unMute(startTime, duration);
 	}
-}
+};
 
 
 module.exports = SoundSceneManager;

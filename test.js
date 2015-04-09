@@ -19,22 +19,14 @@ function loadManager(callback){
 				onLoadAll();
 			}
 		}
-	}
+	};
 	return onload;
 }
 
-var oceanBgSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/Ocean_Amb_V2.mp3', null, loadManager(function(){
-	oceanBgSound.play();
-}));
-var diverSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/Diver_V2.mp3', null, loadManager(function(){
-	diverSound.play();
-}));
-var kitchenSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/restaurent.wav', null, loadManager(function(){
-	kitchenSound.play();
-}));
-var clubSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/jazz.wav', null, loadManager(function(){
-	clubSound.play();
-}));
+var oceanBgSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/Ocean_Amb_V2.mp3', null, loadManager());
+var diverSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/Diver_V2.mp3', null, loadManager());
+var kitchenSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/restaurent.wav', null, loadManager());
+var clubSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/jazz.wav', null, loadManager());
 
 var options ={
 	scenes:[{
@@ -58,8 +50,10 @@ var options ={
 	}],
 	fadeDuration: 1,
 	startingScene: "ocean",
+	fadeInAtStart: true,
+	fadeInAtStartDuration: 5,
 	context: context
-}
+};
 
 var nextButton ;
 var prevButton ;
@@ -76,6 +70,11 @@ window.addEventListener('load', function(){
 function onLoadAll(){
 	var ssm = new SoundSceneManager(options);
 	console.log('starting SSM ', context.currentTime);
+
+	oceanBgSound.play();
+	diverSound.play();
+	kitchenSound.play();
+	clubSound.play();
 
 	nextButton.addEventListener('click', function(){
 		ssm.transitionToNextScene();

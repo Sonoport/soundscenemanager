@@ -76,6 +76,7 @@ var options ={
 	}],
 	fadeDuration: 1,
 	startingScene: "ocean",
+	fadeInAtStart: true,
 	context: context
 }
 var s = soundscenemanager(options);
@@ -85,6 +86,8 @@ var s = soundscenemanager(options);
 	- `scenes` : __Array__ - Array of scene objects which are being managed by this SoundSceneManager. Each scenes object should have the following properties:
 		- `name` : __String__ - The name of the scene.
 		- `maxVolume` : __Number__ - The maximum volume of this scene [0,100];
+		- `fadeInAtStart` : __Boolean__ - If the starting scene should fade in.
+		- `fadeInAtStartDuration` : __Number__ - Time taken (sec) for the starting scene to fade in.
 		- sounds : __Array__ - Array of sound objects which are a part of this specific scene. Each sound object should have the following properties:
 			- `name` : __String__ - A name for identifying the sound object.
 			- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager.
