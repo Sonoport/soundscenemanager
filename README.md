@@ -91,7 +91,7 @@ var s = soundscenemanager(options);
 		- `fadeInAtStartDuration` : __Number__ - Time taken (sec) for the starting scene to fade in.
 		- sounds : __Array__ - Array of sound objects which are a part of this specific scene. Each sound object should have the following properties:
 			- `name` : __String__ - A name for identifying the sound object.
-			- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager.
+			- `node` : __AudioNode__/__SoundModel__/__Audio__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager. A [Sonoport SoundModel object](https://github.com/sonoport/soundmodels) is also accepted here and so is an [HTML5 Audio](https://developer.mozilla.org/en/docs/Web/API/HTMLAudioElement) object.
 	- `fadeDuration` : __Number__ - Default duration, in seconds, of all fadesin/fadeouts.
 	- `startingScene` : __String__ - The name of the first scene to fade in at startup.
 	- `context` : __AudioContext__ - [AudioContext](http://webaudio.github.io/web-audio-api/#the-audiocontext-interface) within which all the AudioNodes are created.
@@ -134,17 +134,6 @@ var s = soundscenemanager(options);
 	- arguments :
 		- `startTime` : __Number__ - Start time for the transtion in the same time coordinate system as the AudioContext _currentTime_ attribute.
 		- `fadeDuration` : __Number__ - Duration in seconds of the transtion.
-
-- `endTransition` : Instantenously ends any currently ongoing transitions and sets volumes to their final levels.
-
-	- eg :
-
-		```
-		s.endTransition(context.currentTime+10);
-		```
-
-	arguments :
-		- `startTime` : __Number__ - Start time for the ending of transitions in the same time coordinate system as the AudioContext _currentTime_ attribute.
 
 - `mute` : Fades out all audio from the SoundSceneManager.
 
@@ -206,7 +195,7 @@ var s = soundscenemanager(options);
 			- `maxVolume` : __Number__ - The maximum volume of this scene [0,100];`
 			- sounds : __Array__ - Array of sound objects which are a part of this specific scene. Each sound object should have the following properties:
 				- `name` : __String__ - A name for identifying the sound object.
-				- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager.
+				- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager. A [Sonoport SoundModel object](https://github.com/sonoport/soundmodels) is also accepted here and so is an [HTML5 Audio](https://developer.mozilla.org/en/docs/Web/API/HTMLAudioElement) object.
 
 
 - `addSoundToScene` : Add a new sound to ax existing scene.
@@ -225,7 +214,7 @@ var s = soundscenemanager(options);
 	- arguments :
 		- `newSound` : __Object__ - A new sound object that should have the following properties :
 			- `name` : __String__ - A name for identifying the sound object.
-			- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager.
+			- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager. A [Sonoport SoundModel object](https://github.com/sonoport/soundmodels) is also accepted here and so is an [HTML5 Audio](https://developer.mozilla.org/en/docs/Web/API/HTMLAudioElement) object.
 		- `sceneName` : __String__ - The name of the scene we want to add this Sound to.
 
 ## Properties

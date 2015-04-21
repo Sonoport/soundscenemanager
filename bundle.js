@@ -95,7 +95,7 @@
 			}]
 		}],
 		fadeDuration: 1,
-		startingScene: "ocean",
+		// startingScene: "ocean",
 		fadeInAtStart: true,
 		fadeInAtStartDuration: 5,
 		context: context

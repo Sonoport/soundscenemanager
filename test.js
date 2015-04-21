@@ -26,7 +26,7 @@ function loadManager(callback){
 var oceanBgSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/Ocean_Amb_V2.mp3', null, loadManager());
 var diverSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/Diver_V2.mp3', null, loadManager());
 var kitchenSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/restaurent.wav', null, loadManager());
-var clubSound = new Looper(context, 'https://dl.dropboxusercontent.com/u/77191118/sounds/jazz.wav', null, loadManager());
+var clubSound = new Audio('https://dl.dropboxusercontent.com/u/77191118/sounds/jazz.wav');
 
 var options ={
 	scenes:[{
@@ -49,7 +49,7 @@ var options ={
 		}]
 	}],
 	fadeDuration: 1,
-	startingScene: "ocean",
+	// startingScene: "ocean",
 	fadeInAtStart: true,
 	fadeInAtStartDuration: 5,
 	context: context
@@ -74,7 +74,7 @@ function onLoadAll(){
 	oceanBgSound.play();
 	diverSound.play();
 	kitchenSound.play();
-	clubSound.play();
+	// clubSound.play();
 
 	nextButton.addEventListener('click', function(){
 		ssm.transitionToNextScene();
