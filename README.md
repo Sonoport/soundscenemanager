@@ -56,7 +56,7 @@ oceanBgSound.buffer = downloadedOceanBuffer;
 var options ={
 	scenes:[{
 		name:"ocean",
-		maxVolume : 70,
+		maxVolume : 0.7,
 		sounds:[{
 			name:"background",
 			node: oceanBgSound,
@@ -86,7 +86,7 @@ var s = soundscenemanager(options);
 - `options` object attribute contains the data about the various scenes in the following format:
 	- `scenes` : __Array__ - Array of scene objects which are being managed by this SoundSceneManager. Each scenes object should have the following properties:
 		- `name` : __String__ - The name of the scene.
-		- `maxVolume` : __Number__ - The maximum volume of this scene [0,100];
+		- `maxVolume` : __Number__ - The maximum volume of this scene [0,1];
 		- `fadeInAtStart` : __Boolean__ - If the starting scene should fade in.
 		- `fadeInAtStartDuration` : __Number__ - Time taken (sec) for the starting scene to fade in.
 		- sounds : __Array__ - Array of sound objects which are a part of this specific scene. Each sound object should have the following properties:
@@ -192,7 +192,7 @@ var s = soundscenemanager(options);
 	- arguments :
 		- `newScene` : __Object__ - A new scene object that should have the following properties :
 			- `name` : __String__ - The name of the scene.
-			- `maxVolume` : __Number__ - The maximum volume of this scene [0,100];`
+			- `maxVolume` : __Number__ - The maximum volume of this scene [0,1];`
 			- sounds : __Array__ - Array of sound objects which are a part of this specific scene. Each sound object should have the following properties:
 				- `name` : __String__ - A name for identifying the sound object.
 				- `node` : __AudioNode__ - An AudioNode which will be connected to the SoundSceneManager and faded in/out. It's preferable that this AudioNode isn't connected to any other AudioNodes, as it will be disconnected in the process of initializing the SoundSceneManager. A [Sonoport SoundModel object](https://github.com/sonoport/soundmodels) is also accepted here and so is an [HTML5 Audio](https://developer.mozilla.org/en/docs/Web/API/HTMLAudioElement) object.

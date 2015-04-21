@@ -1,5 +1,3 @@
-var Fader = require('soundmodels/effects/Fader');
-
 function SoundSceneManager(options) {
 
   if (options.context) {
@@ -22,13 +20,13 @@ function SoundSceneManager(options) {
 
   options.scenes.forEach(function(thisScene) {
     this.addScene(thisScene);
-    thisScene.fader.volume.value = 0;
+    thisScene.fader.gain.value = 0;
     if (thisScene.name === options.startingScene) {
       this.currentScene = thisScene;
       if (options.fadeInAtStart) {
         this.unMute(this._context.currentScene, options.fadeInAtStartDuration || this.fadeDuration);
       }else {
-        thisScene.fader.volume.value = 100;
+        thisScene.fader.gain.value = 1;
       }
     }
   }.bind(this));
@@ -43,27 +41,29 @@ SoundSceneManager.prototype.addSoundToScene = function(thisSound, thisSceneName)
     console.warn('Scene', thisSceneName, ' not found.');
     return;
   }
+
   var thisNode = thisSound.node;
-  if (typeof thisNode === 'AudioNode' || thisNode.isBaseSound){
+  if (typeof thisNode === 'AudioNode' || thisNode.isBaseSound) {
     thisNode.disconnect();
     thisNode.connect(selectedScene.fader);
-   }else if (thisNode instanceof Audio ){
+  }else if (thisNode instanceof Audio) {
+    thisNode.crossOrigin = 'anonymous';
     thisSound.sourceNode = this._context.createMediaElementSource(thisNode);
-    thisSound.sourceNode.connect(selectedScene.fader.inputNode);
-   }else{
+    thisSound.sourceNode.connect(selectedScene.fader);
+  }else {
     console.log('Unknown type of sound.node', thisSound, typeof thisNode);
-   }
+  }
 
   selectedScene.sounds.push(thisSound);
 };
 
 SoundSceneManager.prototype.addScene = function(thisScene) {
   if (!thisScene.maxVolume || typeof thisScene.maxVolume !== 'number') {
-    thisScene.maxVolume = 100;
+    thisScene.maxVolume = 1;
   }
 
   this._scenes.push(thisScene);
-  var newFader = new Fader(this._context);
+  var newFader = this._context.createGain();
   thisScene.fader = newFader;
   this._sceneFaders.push(newFader);
   thisScene.sounds.forEach(function(thisSound) {
@@ -74,9 +74,9 @@ SoundSceneManager.prototype.addScene = function(thisScene) {
 
 SoundSceneManager.prototype._fadeInScene = function(scene, fadeStartTime, fadeEndTime) {
   console.log('' + this._context.currentTime, ': fading in', scene.name, ':', fadeStartTime, '-', fadeEndTime);
-  scene.fader.volume.cancelScheduledValues(this._context.currentTime);
-  scene.fader.volume.setValueAtTime(0, fadeStartTime);
-  scene.fader.volume.linearRampToValueAtTime(scene.maxVolume, fadeEndTime);
+  scene.fader.gain.cancelScheduledValues(this._context.currentTime);
+  scene.fader.gain.setValueAtTime(0, fadeStartTime);
+  scene.fader.gain.linearRampToValueAtTime(scene.maxVolume, fadeEndTime);
 
   this._previousFadeStart = fadeStartTime;
   this._previousFadeEnd = fadeEndTime;
@@ -88,9 +88,9 @@ SoundSceneManager.prototype._fadeOutScene = function(scene, fadeStartTime, fadeE
   }
 
   console.log('' + this._context.currentTime, ': fading out', scene.name, ':', fadeStartTime, '-', fadeEndTime, 'from', currentValue);
-  scene.fader.volume.cancelScheduledValues(this._context.currentTime);
-  scene.fader.volume.setValueAtTime(currentValue, fadeStartTime);
-  scene.fader.volume.linearRampToValueAtTime(0, fadeEndTime);
+  scene.fader.gain.cancelScheduledValues(this._context.currentTime);
+  scene.fader.gain.setValueAtTime(currentValue, fadeStartTime);
+  scene.fader.gain.linearRampToValueAtTime(0, fadeEndTime);
 }
 
 SoundSceneManager.prototype._getCurrentValue = function() {
