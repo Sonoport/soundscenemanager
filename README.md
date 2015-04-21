@@ -1,7 +1,7 @@
 # SoundSceneManager
 Simple scene manager for fading between various sets of sounds..
 
-<!-- [![npm version](https://badge.fury.io/js/soundscenemanager.svg)](http://badge.fury.io/js/crossfade) -->
+[![npm version](https://badge.fury.io/js/soundscenemanager.svg)](http://badge.fury.io/js/soundscenemanager)
 
 # Usage
 
