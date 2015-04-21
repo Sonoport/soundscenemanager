@@ -9,7 +9,7 @@ Simple scene manager for fading between various sets of sounds..
 npm install soundscenemanager
 ```
 
-```
+```js
 var soundscenemanager = require('soundscenemanager');
 
 var oceanBgSound = context.createBufferSource();
@@ -49,7 +49,7 @@ s.mute(context.currentTime+20, 2);
 ## Constructor
 
 eg :
-```
+```js
 var oceanBgSound = context.createBufferSource();
 oceanBgSound.buffer = downloadedOceanBuffer;
 
@@ -102,7 +102,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		s.transitionToScene('nextSceneName', context.currentTime+10, 2);
 		```
 
@@ -115,7 +115,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		s.transitionToNextScene(context.currentTime+10, 2);
 		```
 
@@ -127,7 +127,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		s.transitionToPrevScene(context.currentTime+10, 2);
 		```
 
@@ -139,7 +139,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		s.mute(context.currentTime+10, 2);
 		```
 
@@ -151,7 +151,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		s.unMute(context.currentTime+10, 2);
 		```
 
@@ -163,7 +163,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		s.toggle(context.currentTime+10, 2);
 		```
 
@@ -175,7 +175,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		var newScene = {
 			name:"ocean",
 			sounds:[{
@@ -202,7 +202,7 @@ var s = soundscenemanager(options);
 
 	- eg :
 
-		```
+		```js
 		var newSound = {
 			name:"background",
 			node: oceanBgSound,
