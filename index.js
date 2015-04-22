@@ -43,7 +43,7 @@ SoundSceneManager.prototype.addSoundToScene = function(thisSound, thisSceneName)
   }
 
   var thisNode = thisSound.node;
-  if (typeof thisNode === 'AudioNode' || thisNode.isBaseSound) {
+  if (typeof thisNode === 'AudioNode' || thisNode.isBaseSound || thisNode.isBaseEffect) {
     thisNode.disconnect();
     thisNode.connect(selectedScene.fader);
   }else if (thisNode instanceof Audio) {
