@@ -1,6 +1,6 @@
 {
   "name": "soundscenemanager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A framework for managing multiple sounds that need to change based on the 'scene' on an application.",
   "main": "index.js",
   "scripts": {

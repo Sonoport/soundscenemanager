@@ -167,7 +167,7 @@ SoundSceneManager.prototype.transitionToPrevScene = function(startTime, duration
 };
 
 SoundSceneManager.prototype.mute = function(startTime, duration) {
-  if (this.currentScene) {
+  if (this.currentScene && !this.isMuted) {
     if (!startTime || typeof startTime !== 'number') {
       startTime = this._context.currentTime;
     }
@@ -184,7 +184,7 @@ SoundSceneManager.prototype.mute = function(startTime, duration) {
 };
 
 SoundSceneManager.prototype.unMute = function(startTime, duration) {
-  if (this.currentScene) {
+  if (this.currentScene && this.isMuted) {
     if (!startTime || typeof startTime !== 'number') {
       startTime = this._context.currentTime;
     }
