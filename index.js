@@ -24,7 +24,9 @@ function SoundSceneManager(options) {
     if (thisScene.name === options.startingScene) {
       this.currentScene = thisScene;
       if (options.fadeInAtStart) {
-        this.unMute(this._context.currentScene, options.fadeInAtStartDuration || this.fadeDuration);
+        var startTime = this._context.currentTime;
+        var endTime = this._context.currentTime + options.fadeInAtStartDuration || this.fadeDuration
+        this._fadeInScene(this.currentScene, startTime, endTime );
       }else {
         thisScene.fader.gain.value = 1;
       }
