@@ -47,7 +47,7 @@ var options ={
 		}]
 	}],
 	fadeDuration: 1,
-	// startingScene: "ocean",
+	startingScene: "ocean",
 	fadeInAtStart: true,
 	fadeInAtStartDuration: 5,
 	context: context
@@ -67,6 +67,7 @@ window.addEventListener('load', function(){
 
 function onLoadAll(){
 	var ssm = new SoundSceneManager(options);
+	window.ssm = ssm;
 	console.log('starting SSM ', context.currentTime);
 
 	oceanBgSound.play();

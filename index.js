@@ -26,7 +26,7 @@ function SoundSceneManager(options) {
       if (options.fadeInAtStart) {
         var startTime = this._context.currentTime;
         var endTime = this._context.currentTime + options.fadeInAtStartDuration || this.fadeDuration
-        this._fadeInScene(this.currentScene, startTime, endTime );
+        this._fadeInScene(this.currentScene, startTime, endTime, 0);
       }else {
         thisScene.fader.gain.value = 1;
       }
@@ -74,14 +74,16 @@ SoundSceneManager.prototype.addScene = function(thisScene) {
   newFader.connect(this._context.destination);
 };
 
-SoundSceneManager.prototype._fadeInScene = function(scene, fadeStartTime, fadeEndTime) {
-  console.log('' + this._context.currentTime, ': fading in', scene.name, ':', fadeStartTime, '-', fadeEndTime);
-  scene.fader.gain.cancelScheduledValues(this._context.currentTime);
-  scene.fader.gain.setValueAtTime(0, fadeStartTime);
+SoundSceneManager.prototype._fadeInScene = function(scene, fadeStartTime, fadeEndTime, currentValue) {
+  console.log('' + this._context.currentTime, ': fading in', scene.name, 'from', currentValue, ':', fadeStartTime, '-', fadeEndTime);
+  scene.fader.gain.cancelScheduledValues(fadeStartTime);
+  scene.fader.gain.setValueAtTime(currentValue, fadeStartTime);
   scene.fader.gain.linearRampToValueAtTime(scene.maxVolume, fadeEndTime);
 
-  this._previousFadeStart = fadeStartTime;
-  this._previousFadeEnd = fadeEndTime;
+  scene._prevStartValue = currentValue;
+  scene._prevTargetValue = scene.maxVolume;
+  scene._prevStartTime = fadeStartTime;
+  scene._prevEndTime = fadeEndTime;
 }
 
 SoundSceneManager.prototype._fadeOutScene = function(scene, fadeStartTime, fadeEndTime, currentValue) {
@@ -89,17 +91,24 @@ SoundSceneManager.prototype._fadeOutScene = function(scene, fadeStartTime, fadeE
     currentValue = scene.maxVolume;
   }
 
-  console.log('' + this._context.currentTime, ': fading out', scene.name, ':', fadeStartTime, '-', fadeEndTime, 'from', currentValue);
-  scene.fader.gain.cancelScheduledValues(this._context.currentTime);
+  console.log('' + this._context.currentTime, ': fading out', scene.name, 'from', currentValue, ':', fadeStartTime, '-', fadeEndTime);
+  scene.fader.gain.cancelScheduledValues(fadeStartTime);
   scene.fader.gain.setValueAtTime(currentValue, fadeStartTime);
   scene.fader.gain.linearRampToValueAtTime(0, fadeEndTime);
+
+  scene._prevStartValue = currentValue;
+  scene._prevTargetValue = 0;
+  scene._prevStartTime = fadeStartTime;
+  scene._prevEndTime = fadeEndTime;
 }
 
-SoundSceneManager.prototype._getCurrentValue = function() {
-  var currentValue = this.currentScene.maxVolume;
-  var remainingTime = (this._previousFadeEnd - this._context.currentTime);
-  if (remainingTime > 0) {
-    currentValue = (1 - (remainingTime / (this._previousFadeEnd - this._previousFadeStart))) * currentValue;
+SoundSceneManager.prototype._getCurrentValue = function(scene) {
+
+
+
+  var currentValue = scene._prevTargetValue || scene.fader.gain.value;
+  if (scene._prevEndTime && scene._prevEndTime > this._context.currentTime) {
+    currentValue =  scene._prevStartValue + (scene._prevTargetValue - scene._prevStartValue) * ((this._context.currentTime - scene._prevStartTime) / (scene._prevEndTime - scene._prevStartTime));
   }
 
   return currentValue;
@@ -144,11 +153,12 @@ SoundSceneManager.prototype.transitionToScene = function(sceneName, startTime, d
     var fadeEndTime = fadeStartTime + duration;
 
     if (this.currentScene) {
-      var currentValue = this._getCurrentValue();
+      var currentValue = this._getCurrentValue(this.currentScene);
       this._fadeOutScene(this.currentScene, fadeStartTime, fadeEndTime, currentValue);
     }
 
-    this._fadeInScene(nextScene, fadeStartTime, fadeEndTime);
+    var nextCurrentValue = this._getCurrentValue(nextScene);
+    this._fadeInScene(nextScene, fadeStartTime, fadeEndTime, nextCurrentValue);
   }
 
   this.currentScene = nextScene;
@@ -195,7 +205,8 @@ SoundSceneManager.prototype.unMute = function(startTime, duration) {
       duration = this.fadeDuration;
     }
 
-    this._fadeInScene(this.currentScene, startTime, startTime + duration);
+    var nextCurrentValue = this._getCurrentValue(this.currentScene);
+    this._fadeInScene(this.currentScene, startTime, startTime + duration, nextCurrentValue);
   }
 
   this.isMuted = false;
