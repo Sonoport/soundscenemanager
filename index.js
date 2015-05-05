@@ -76,7 +76,7 @@ SoundSceneManager.prototype.addSoundToScene = function(thisSound, thisSceneName)
 
 	}else {
 
-		console.log('Unknown type of sound.node', thisSound, typeof thisNode);
+		console.warn('Unknown type of sound.node', thisSound, typeof thisNode);
 
 	}
 
@@ -117,7 +117,7 @@ SoundSceneManager.prototype.addScene = function(thisScene) {
 
 SoundSceneManager.prototype._fadeInScene = function(scene, fadeStartTime, fadeEndTime, currentValue) {
 
-	console.log('' + this._context.currentTime, ': fading in', scene.name, 'from', currentValue, ':', fadeStartTime, '-', fadeEndTime);
+	// console.log('' + this._context.currentTime, ': fading in', scene.name, 'from', currentValue, ':', fadeStartTime, '-', fadeEndTime);
 	scene.fader.gain.cancelScheduledValues(fadeStartTime);
 	scene.fader.gain.setValueAtTime(currentValue, fadeStartTime);
 	scene.fader.gain.linearRampToValueAtTime(scene.maxVolume, fadeEndTime);
@@ -137,7 +137,7 @@ SoundSceneManager.prototype._fadeOutScene = function(scene, fadeStartTime, fadeE
 
 	}
 
-	console.log('' + this._context.currentTime, ': fading out', scene.name, 'from', currentValue, ':', fadeStartTime, '-', fadeEndTime);
+	// console.log('' + this._context.currentTime, ': fading out', scene.name, 'from', currentValue, ':', fadeStartTime, '-', fadeEndTime);
 	scene.fader.gain.cancelScheduledValues(fadeStartTime);
 	scene.fader.gain.setValueAtTime(currentValue, fadeStartTime);
 	scene.fader.gain.linearRampToValueAtTime(0, fadeEndTime);
