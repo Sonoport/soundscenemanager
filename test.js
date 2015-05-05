@@ -44,6 +44,9 @@ var options ={
 		sounds:[{
 			name:"club",
 			node: clubSound,
+		},{
+			name:"kitchen",
+			node: kitchenSound,
 		}]
 	}],
 	fadeDuration: 1,
